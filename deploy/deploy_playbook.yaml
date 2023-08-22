@@ -1,0 +1,34 @@
+---
+- hosts: all
+  become: true
+  tasks:
+  
+  - name: update system
+    yum:
+      name: '*'
+      state: latest
+    when: ansible_distribution == "Amazon"
+  
+  - name: install java 17
+    yum:
+      name: java-17-amazon-corretto-devel.x86_64
+      state: present
+  
+  - name: install maven package
+    yum:
+      name: maven
+    when: ansible_distribution == "Amazon"
+  
+  - name: install docker
+    yum: 
+      name: docker
+      state: present
+  
+  - name: login to docker
+    shell: "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin {{ REPO_URL }}"
+  
+  - name: pull docker image
+    shell: docker pull ${env.REPO_URL}/wolender-ecr:latest
+
+  - name: run the app
+    shell: docker run -p 8080:8080 -d ${env.REPO_URL}/wolender-ecr:latest
