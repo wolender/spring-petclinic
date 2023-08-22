@@ -38,7 +38,8 @@ pipeline {
             steps {
 
                 load "$JENKINS_HOME/env_variables.groovy"
-
+                
+                sh 'docker login'
                 sh "docker tag wolender-ecr:latest ${env.REPO_URL}"
                 sh "docker push ${env.REPO_URL}"
             }
