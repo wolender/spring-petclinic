@@ -28,7 +28,7 @@
     shell: "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin {{ REPO_URL }}"
   
   - name: pull docker image
-    shell: docker pull ${env.REPO_URL}/wolender-ecr:latest
+    shell: docker pull {{ REPO_URL }}/wolender-ecr:latest
 
   - name: run the app
-    shell: docker run -p 8080:8080 -d ${env.REPO_URL}/wolender-ecr:latest
+    shell: docker run -p 8080:8080 -d {{ REPO_URL }}/wolender-ecr:latest
