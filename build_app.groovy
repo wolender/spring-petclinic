@@ -39,7 +39,7 @@ pipeline {
 
                 load "$JENKINS_HOME/env_variables.groovy"
 
-                sh "docker login --username AWS --password-stdin ${env.REPO_URL}"
+                sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin ${env.REPO_URL}"
                 sh "docker tag wolender-ecr:latest ${env.REPO_URL}"
                 sh "docker push ${env.REPO_URL}"
             }
