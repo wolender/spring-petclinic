@@ -1,8 +1,10 @@
 ---
 - hosts: all
+  vars:
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+    
   become: true
   tasks:
-  
   - name: update system
     yum:
       name: '*'
