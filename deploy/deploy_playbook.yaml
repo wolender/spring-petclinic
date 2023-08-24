@@ -2,7 +2,7 @@
 - hosts: all
   vars:
     ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
-    
+
   become: true
   tasks:
   - name: update system
@@ -27,8 +27,14 @@
       state: present
   
   - name: login to docker
-    shell: "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin {{ REPO_URL }}"
-  
+    shell: "aws ecr get-login-password --region eu-central-1"
+    register: ecr_login
+
+  - name: Login to ecr
+    command:  docker login --username AWS --password-stdin {{ REPO_URL }}
+    args:
+      stdin: "{{ ecr_login.stdout }}"
+
   - name: pull docker image
     shell: docker pull {{ REPO_URL }}/wolender-ecr:latest
 
