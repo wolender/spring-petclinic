@@ -9,7 +9,7 @@ pipeline {
             }
         }
 
-        stage('Login') {
+        stage('Deploy via Ansible') {
             steps {
                 dir('deploy'){
                     load "$JENKINS_HOME/env_variables.groovy"
