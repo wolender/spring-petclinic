@@ -16,6 +16,7 @@ pipeline {
                     
                     sh "echo ec2-user@${env.APP_IP} > inventory "
                     sh "/var/lib/jenkins/.local/bin/ansible-playbook deploy_playbook.yaml -e \"REPO_URL=${env.REPO_URL}\" "
+                    sh "echo http://${env.APP_IP}:8080"
                 }
 
             }
