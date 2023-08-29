@@ -28,7 +28,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean install -DskipTests'
+                sh 'mvn clean install -DskipTests -Dspring.profiles.active=mysql'
                 sh 'docker build -t wolender-ecr .'
             }
             
