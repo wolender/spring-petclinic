@@ -39,4 +39,4 @@
     shell: docker pull {{ REPO_URL }}:latest
 
   - name: run the app
-    shell: docker run -p 8080:8080 -d {{ REPO_URL }}:latest
+    shell: docker run -p 8080:8080 -p 3306:3306 -d {{ REPO_URL }}:latest
