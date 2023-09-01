@@ -75,7 +75,7 @@ stage('Add version') {
 
                 sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin ${env.REPO_URL}"
                 sh "docker tag wolender-ecr:${env.APP_NEW_VER} ${env.REPO_URL}"
-                sh "docker push ${env.REPO_URL}:${env.APP_NEW_VER}"
+                sh "docker push ${env.REPO_URL}"
             }
             
         }
