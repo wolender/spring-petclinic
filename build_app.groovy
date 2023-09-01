@@ -55,7 +55,7 @@ stage('Add version') {
                 load "$JENKINS_HOME/env_variables.groovy"
                 sh "git tag -a ${env.APP_NEW_VER} -m \"Version ${env.APP_NEW_VER}\""
                 sh "git remote set-url origin https://github.com/wolender/spring-petclinic.git"
-                sh "git push --tags"
+                // sh "git push --tags"
             }
         }
 
