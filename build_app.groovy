@@ -34,6 +34,15 @@ pipeline {
             }
         }
 
+        stage('Tag Repository') {
+            steps {
+
+                load "$JENKINS_HOME/env_variables.groovy"
+                sh "git tag -a ${env.APP_NEW_VER} -m \"Version ${env.APP_NEW_VER}\""
+                sh "git push origin ${env.APP_NEW_VER}"
+            }
+        }
+
         stage('Build') {
             steps {
                 sh 'mvn clean install -DskipTests -Dspring.profiles.active=mysql'
