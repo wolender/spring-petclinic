@@ -25,13 +25,28 @@ pipeline {
             }
             
         }
-        stage('Add version') {
-            steps {
-                sh "echo \"env.APP_NEW_VER=\"$(python3 semver.py)\"\" > /var/lib/jenkins/app_version.groovy"
-                load "$JENKINS_HOME/app_version.groovy"
-                sh "mvn -q -ntp -B versions:set -DnewVersion=${env.APP_NEW_VER}"
-            }
+stage('Add version') {
+    steps {
+        script {
+            // Execute the Python script and capture its output
+            def pythonOutput = sh(script: 'python3 semver.py', returnStdout: true).trim()
+            
+            // Set the environmental variable within this script block
+            env.APP_NEW_VER = pythonOutput
+            
+            // Save the environmental variable to a Groovy script file
+            writeFile file: "$JENKINS_HOME/app_version.groovy", text: "env.APP_NEW_VER=\"${env.APP_NEW_VER}\""
+            
+            // Load the Groovy script to make the variable available
+            load "$JENKINS_HOME/app_version.groovy"
+            
+            echo "Captured Version: ${env.APP_NEW_VER}"
+            
+            sh "mvn -q -ntp -B versions:set -DnewVersion=${env.APP_NEW_VER}"
         }
+    }
+}
+
 
         stage('Tag Repository') {
             steps {
