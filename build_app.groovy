@@ -28,8 +28,9 @@ pipeline {
 stage('Add version') {
     steps {
         script {
+            load "$JENKINS_HOME/app_version.groovy"
             // Execute the Python script and capture its output
-            def pythonOutput = sh(script: 'python3 semver.py', returnStdout: true).trim()
+            def pythonOutput = sh(script: "python3 semver.py ${env.APP_NEW_VER}", returnStdout: true).trim()
             
             // Set the environmental variable within this script block
             env.APP_NEW_VER = pythonOutput
