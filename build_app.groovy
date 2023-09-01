@@ -52,7 +52,7 @@ stage('Add version') {
         stage('Tag Repository') {
             steps {
 
-                load "$JENKINS_HOME/env_variables.groovy"
+                load "$JENKINS_HOME/app_version.groovy"
                 sh "git tag -a ${env.APP_NEW_VER} -m \"Version ${env.APP_NEW_VER}\""
                 sh "git remote set-url origin https://github.com/wolender/spring-petclinic.git"
                 // sh "git push --tags"
@@ -61,8 +61,9 @@ stage('Add version') {
 
         stage('Build') {
             steps {
+                load "$JENKINS_HOME/app_version.groovy"
                 sh 'mvn clean install -DskipTests -Dspring.profiles.active=mysql'
-                sh 'docker build -t wolender-ecr .'
+                sh "docker build -t wolender-ecr:${env.APP_NEW_VER} ."
             }
             
         }
