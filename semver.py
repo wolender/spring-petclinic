@@ -5,7 +5,7 @@ def calculate_next_version(latest_version):
     major, minor, patch = map(int, latest_version.split('.'))
 
     # Increment the minor version by one
-    patch += 1
+    minor += 1
 
     next_version = f"{major}.{minor}.{patch}"
 
