@@ -19,11 +19,19 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'echo "running tests"'
-                // sh 'mvn clean test'
+                sh 'mvn clean test'
 
-                // junit 'target/surefire-reports/*.xml'
+                junit 'target/surefire-reports/*.xml'
             }
             
+        }
+        stage('Add version') {
+            steps {
+                sh 'echo "env.APP_NEW_VER=$(python3 semver.py)" >> /var/lib/jenkins/env_variables.groovy'
+
+                load "$JENKINS_HOME/env_variables.groovy"
+                sh "mvn -q -ntp -B versions:set -DnewVersion=${env.APP_NEW_VER}"
+            }
         }
 
         stage('Build') {
@@ -40,7 +48,7 @@ pipeline {
                 load "$JENKINS_HOME/env_variables.groovy"
 
                 sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin ${env.REPO_URL}"
-                sh "docker tag wolender-ecr:latest ${env.REPO_URL}"
+                sh "docker tag wolender-ecr:${env.APP_NEW_VER} ${env.REPO_URL}"
                 sh "docker push ${env.REPO_URL}"
             }
             
