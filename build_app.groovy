@@ -28,7 +28,6 @@ pipeline {
         stage('Add version') {
             steps {
                 sh 'echo "env.APP_NEW_VER=\"$(python3 semver.py)\"" > /var/lib/jenkins/app_version.groovy'
-
                 load "$JENKINS_HOME/app_version.groovy"
                 sh "mvn -q -ntp -B versions:set -DnewVersion=${env.APP_NEW_VER}"
             }
