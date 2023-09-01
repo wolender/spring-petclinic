@@ -36,7 +36,7 @@
       stdin: "{{ ecr_login.stdout }}"
 
   - name: pull docker image
-    shell: docker pull {{ REPO_URL }}:latest
+    shell: docker pull {{ REPO_URL }}:{{ APP_NEW_VER }}
 
   - name: run the app
-    shell: docker run -p 8080:8080 -p 3306:3306 -e MYSQL_URL=jdbc:mysql://{{ MYSQL_URL }}/petclinic -d {{ REPO_URL }}:latests
+    shell: docker run -p 8080:8080 -p 3306:3306 -e MYSQL_URL=jdbc:mysql://{{ MYSQL_URL }}/petclinic -d {{ REPO_URL }}:{{ APP_NEW_VER }}
