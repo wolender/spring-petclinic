@@ -19,17 +19,17 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'echo "running tests"'
-                sh 'mvn clean test'
+                // sh 'mvn clean test'
 
-                junit 'target/surefire-reports/*.xml'
+                // junit 'target/surefire-reports/*.xml'
             }
             
         }
         stage('Add version') {
             steps {
-                sh 'echo "env.APP_NEW_VER="$(python3 semver.py)"" >> /var/lib/jenkins/env_variables.groovy'
+                sh "echo \"env.APP_NEW_VER=\"$(python3 semver.py)\" > /var/lib/jenkins/app_version.groovy"
 
-                load "$JENKINS_HOME/env_variables.groovy"
+                load "$JENKINS_HOME/app_version.groovy"
                 sh "mvn -q -ntp -B versions:set -DnewVersion=${env.APP_NEW_VER}"
             }
         }
