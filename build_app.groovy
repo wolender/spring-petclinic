@@ -49,6 +49,7 @@ stage('Add version') {
                 sshagent(credentials: ['GIT_KEY']) {
                     load "$JENKINS_HOME/app_version.groovy"
                     sh "git tag -a ${env.APP_NEW_VER} -m \"Version ${env.APP_NEW_VER}\""
+                    sh "ssh-keyscan github.com >> ~/.ssh/known_hosts"
                     sh "git remote set-url origin git@github.com:wolender/spring-petclinic.git"
                     sh '''
                     git push git@github.com:wolender/spring-petclinic.git --tags
