@@ -50,6 +50,7 @@
   - name: Delete all containers if the desired container is not running
     shell: docker rm $(docker ps -qa)
     when: container_running.rc == 0
+    gnore_errors: yes
 
   - name: run the app
     shell: docker run -p 8080:8080 -p 3306:3306 -e MYSQL_URL=jdbc:mysql://{{ MYSQL_URL }}/petclinic -d {{ REPO_URL }}:{{ APP_NEW_VER }}
