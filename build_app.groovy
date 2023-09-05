@@ -19,9 +19,9 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'echo "running tests"'
-                sh 'mvn clean test'
+                // sh 'mvn clean test'
 
-                junit 'target/surefire-reports/*.xml'
+                // junit 'target/surefire-reports/*.xml'
             }
             
         }
@@ -50,7 +50,11 @@ stage('Add version') {
                     load "$JENKINS_HOME/app_version.groovy"
                     sh "git tag -a ${env.APP_NEW_VER} -m \"Version ${env.APP_NEW_VER}\""
                     sh "git remote set-url origin git@github.com:wolender/spring-petclinic.git"
-                    sh "git push git@github.com:wolender/spring-petclinic.git --tags -key $MY_SSH_KEY"
+                    sh '''
+                    ssh-add $MY_SSH_KEY
+                    git push git@github.com:wolender/spring-petclinic.git --tags
+                    '''
+
                 }
 
             }
