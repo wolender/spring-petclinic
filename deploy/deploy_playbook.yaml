@@ -39,7 +39,7 @@
     shell: docker pull {{ REPO_URL }}:{{ APP_NEW_VER }}
 
   - name: Check if the desired container is running
-    command: docker ps  --filter "status=running" --filter "{{ REPO_URL }}:{{ APP_NEW_VER }}" --quiet
+    command: docker ps  --filter "status=running" --filter "ancestor={{ REPO_URL }}:{{ APP_NEW_VER }}" --quiet
     register: container_running
     ignore_errors: yes  # Ignore errors if the container is not found
 
