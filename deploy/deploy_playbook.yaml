@@ -46,6 +46,7 @@
   - name: Stop all containers if the desired container is not running
     shell: docker stop $(docker ps -q)
     when: container_running.rc == 0
+    ignore_errors: yes
 
   - name: Delete all containers if the desired container is not running
     shell: docker rm $(docker ps -qa)
