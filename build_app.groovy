@@ -51,7 +51,6 @@ stage('Add version') {
                     sh "git tag -a ${env.APP_NEW_VER} -m \"Version ${env.APP_NEW_VER}\""
                     sh "git remote set-url origin git@github.com:wolender/spring-petclinic.git"
                     sh '''
-                    ssh-add $MY_SSH_KEY
                     git push git@github.com:wolender/spring-petclinic.git --tags
                     '''
 
