@@ -44,11 +44,11 @@
     ignore_errors: yes  # Ignore errors if the container is not found
 
   - name: Stop all containers if the desired container is not running
-    command: docker stop $(docker ps -q)
+    shell: docker stop $(docker ps -q)
     when: container_running.rc == 0
 
   - name: Delete all containers if the desired container is not running
-    command: docker rm $(docker ps -qa)
+    shell: docker rm $(docker ps -qa)
     when: container_running.rc == 0
 
   - name: run the app
