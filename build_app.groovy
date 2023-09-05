@@ -11,7 +11,9 @@ pipeline {
 
         stage('Static Code Analysis') {
             steps {
-                sh 'echo analize'
+                withSonarQubeEnv() {
+                sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=petclinic -Dsonar.projectName='petclinic'"
+                }
             }
             
         }
@@ -19,9 +21,9 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'echo "running tests"'
-                // sh 'mvn clean test'
+                sh 'mvn clean test'
 
-                // junit 'target/surefire-reports/*.xml'
+                junit 'target/surefire-reports/*.xml'
             }
             
         }
