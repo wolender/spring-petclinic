@@ -46,7 +46,7 @@ stage('Add version') {
 
         stage('Tag Repository') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'GIT_KEY', keyFileVariable: 'MY_SSH_KEY')]) {
+                sshagent(credentials: ['GIT_KEY']) {
                     load "$JENKINS_HOME/app_version.groovy"
                     sh "git tag -a ${env.APP_NEW_VER} -m \"Version ${env.APP_NEW_VER}\""
                     sh "git remote set-url origin git@github.com:wolender/spring-petclinic.git"
