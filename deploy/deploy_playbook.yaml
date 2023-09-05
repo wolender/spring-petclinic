@@ -45,7 +45,7 @@
 
   - name: Stop all containers if the desired container is not running
     command: docker stop $(docker ps -q)
-    when: container_running.rc != 0
+    when: container_running.rc != 1
     async: 600  # Give Docker some time to stop all containers
     poll: 0
 
