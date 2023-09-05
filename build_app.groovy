@@ -56,7 +56,7 @@ stage('Add version') {
                     sh """
                     git add . 
                     git commit -m \"Version: ${env.APP_NEW_VER}\"
-                    git push git@github.com:wolender/spring-petclinic.git --tags
+                    git push git@github.com:wolender/spring-petclinic.git 
                     """
 
                 }
