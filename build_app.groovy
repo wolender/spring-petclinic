@@ -11,8 +11,8 @@ pipeline {
 
         stage('Static Code Analysis') {
             steps {
-                withSonarQubeEnv() {
-                sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=petclinic -Dsonar.projectName='petclinic'"
+                withSonarQubeEnv(installationName: 'SQ_SERVER') {
+                    sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=petclinic -Dsonar.projectName='petclinic'"
                 }
             }
             
