@@ -29,16 +29,11 @@ stage('Add version') {
     steps {
         script {
             load "$JENKINS_HOME/app_version.groovy"
-            // Execute the Python script and capture its output
             def pythonOutput = sh(script: "python3 semver.py ${env.APP_NEW_VER}", returnStdout: true).trim()
-            
-            // Set the environmental variable within this script block
             env.APP_NEW_VER = pythonOutput
-            
-            // Save the environmental variable to a Groovy script file
+
             writeFile file: "$JENKINS_HOME/app_version.groovy", text: "env.APP_NEW_VER=\"${env.APP_NEW_VER}\""
             
-            // Load the Groovy script to make the variable available
             load "$JENKINS_HOME/app_version.groovy"
             
             echo "Captured Version: ${env.APP_NEW_VER}"
@@ -51,11 +46,13 @@ stage('Add version') {
 
         stage('Tag Repository') {
             steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'GIT_KEY', keyFileVariable: 'MY_SSH_KEY')]) {
+                    load "$JENKINS_HOME/app_version.groovy"
+                    sh "git tag -a ${env.APP_NEW_VER} -m \"Version ${env.APP_NEW_VER}\""
+                    sh "git remote set-url origin git@github.com:wolender/spring-petclinic.git"
+                    sh "git push git@github.com:wolender/spring-petclinic.git --tags -key $MY_SSH_KEY"
+                }
 
-                load "$JENKINS_HOME/app_version.groovy"
-                sh "git tag -a ${env.APP_NEW_VER} -m \"Version ${env.APP_NEW_VER}\""
-                sh "git remote set-url origin https://github.com/wolender/spring-petclinic.git"
-                // sh "git push --tags"
             }
         }
 
