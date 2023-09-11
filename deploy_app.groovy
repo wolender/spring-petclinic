@@ -1,6 +1,9 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'mvn'
+    }
 
     stages {
         stage('Pull') {
@@ -12,6 +15,11 @@ pipeline {
         stage('Deploy via Ansible') {
             steps {
                 dir('deploy'){
+
+                    copyArtifacts fingerprintArtifacts: true,
+                    projectName: "${dump_job_path}",
+                    target: "env_vars.groovy"
+                    
                     load "$JENKINS_HOME/env_variables.groovy"
                     load "$JENKINS_HOME/app_version.groovy"
                     
