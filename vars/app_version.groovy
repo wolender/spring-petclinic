@@ -1,1 +1,1 @@
-env.APP_NEW_VER="3.12.1"
+env.APP_NEW_VER="3.13.1"
