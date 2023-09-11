@@ -36,20 +36,20 @@ pipeline {
                 copyArtifacts(
                     projectName: 'Provision Resources', // Name of the first pipeline
                     filter: 'env_variables.groovy', // Path to the artifact in the first pipeline
-                    target: "." 
+                    target: "vars/env_variables.groovy" 
                 )
             }
         }
         stage('Add version') {
             steps {
                 script {
-                    load "app_version.groovy"
+                    load "vars/app_version.groovy"
                     def pythonOutput = sh(script: "python3 semver.py ${env.APP_NEW_VER}", returnStdout: true).trim()
                     env.APP_NEW_VER = pythonOutput
 
-                    writeFile file: "app_version.groovy", text: "env.APP_NEW_VER=\"${env.APP_NEW_VER}\""
+                    writeFile file: "vars/app_version.groovy", text: "env.APP_NEW_VER=\"${env.APP_NEW_VER}\""
                     
-                    load "app_version.groovy"
+                    load "vars/app_version.groovy"
                     
                     echo "Captured Version: ${env.APP_NEW_VER}"
                     
@@ -62,7 +62,7 @@ pipeline {
         stage('Tag Repository') {
             steps {
                 sshagent(credentials: ['GIT_KEY']) {
-                    load "app_version.groovy"
+                    load "vars/app_version.groovy"
                     sh "git tag -a ${env.APP_NEW_VER} -m \"Version ${env.APP_NEW_VER}\""
                     sh "ssh-keyscan github.com >> ~/.ssh/known_hosts"
                     sh "git remote set-url origin git@github.com:wolender/spring-petclinic.git"
@@ -79,7 +79,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                load "app_version.groovy"
+                load "vars/app_version.groovy"
                 sh 'mvn clean install -DskipTests -Dspring.profiles.active=mysql'
                 sh "docker build -t wolender-ecr:${env.APP_NEW_VER} ."
             }
@@ -89,7 +89,7 @@ pipeline {
         stage('Push') {
             steps {
 
-                load "env_variables.groovy"
+                load "vars/env_variables.groovy"
 
                 sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin ${env.REPO_URL}"
                 sh "docker tag wolender-ecr:${env.APP_NEW_VER} ${env.REPO_URL}:${env.APP_NEW_VER}"
