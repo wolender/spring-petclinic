@@ -35,7 +35,7 @@ pipeline {
             steps{
                 copyArtifacts(
                     projectName: 'Provision Resources', // Name of the first pipeline
-                    filter: '*/terraform/env_variables.groovy', // Path to the artifact in the first pipeline
+                    filter: './env_variables.groovy', // Path to the artifact in the first pipeline
                     target: "env_variables.groovy" 
                 )
             }
