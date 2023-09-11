@@ -1,0 +1,1 @@
+env.APP_NEW_VER=3.10.1
