@@ -56,7 +56,7 @@ pipeline {
             script {
                 sh "ls -al"
                 load "vars/env_variables.groovy"
-                load "/vars/app_version.groovy"
+                load "vars/app_version.groovy"
                 def appUrl = "http://${env.APP_LB_URL}"
                 currentBuild.description = "Application version ${env.APP_NEW_VER} URL: ${appUrl}"
             }
