@@ -44,7 +44,7 @@ pipeline {
                         sh "cd "
                         sh "ls -al"
                         sh "pwd"
-                        stash(name: 'Vars', includes: 'env_variables.groovy')
+                        stash(name: 'Vars')
                 }
             }
         }
