@@ -52,7 +52,7 @@ pipeline {
     }
     post {
         success {
-            unstash('Vars' into: 'vars')
+            unstash('Vars')
             script {
                 sh "ls -al"
                 // load ".vars/env_variables.groovy"
