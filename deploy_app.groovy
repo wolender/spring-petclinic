@@ -54,7 +54,7 @@ pipeline {
         success {
             unstash('Vars')
             script {
-                load "../vars/env_variables.groovy"
+                load "env_variables.groovy"
                 def appUrl = "http://${env.APP_LB_URL}" // Replace with your actual app URL
                 currentBuild.description = "Application URL: [${appUrl}](${appUrl})"
             }
