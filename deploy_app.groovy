@@ -31,7 +31,7 @@ pipeline {
                         load "../vars/app_version.groovy"
                         
                         sh "echo ec2-user@${env.APP_IP} > inventory "
-                        sh '/var/lib/jenkins/.local/bin/ansible-playbook -v deploy_playbook.yaml -e "REPO_URL=${env.REPO_URL}" -e "MYSQL_URL=${env.MYSQL_URL}" -e "MYSQL_USER=$USERNAME" -e "MYSQL_PASS=$PASSWORD" -e "APP_NEW_VER=${env.APP_NEW_VER}"'
+                        sh "/var/lib/jenkins/.local/bin/ansible-playbook -v deploy_playbook.yaml -e \"REPO_URL=${env.REPO_URL}\" -e \"MYSQL_URL=${env.MYSQL_URL}\" -e \"MYSQL_USER=${USERNAME}\" -e \"MYSQL_PASS=${PASSWORD}\" -e \"APP_NEW_VER=${env.APP_NEW_VER}\""
                         sh "echo \"http://${env.APP_LB_URL}\""
                     }
                 }
