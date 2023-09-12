@@ -32,6 +32,7 @@ pipeline {
                         
                         sh "echo ec2-user@${env.APP_IP} > inventory "
                         sh "/var/lib/jenkins/.local/bin/ansible-playbook -v deploy_playbook.yaml -e \"REPO_URL=${env.REPO_URL}\" -e \"MYSQL_URL=${env.MYSQL_URL}\" -e \"MYSQL_USER=${USERNAME}\" -e \"MYSQL_PASS=${PASSWORD}\" -e \"APP_NEW_VER=${env.APP_NEW_VER}\""
+                        stash(name: 'Vars', includes: 'env_variables.groovy')
                         
                     }
                 }
@@ -43,6 +44,7 @@ pipeline {
     }
     post {
         success {
+            unstash('Vars')
             script {
                 load "../vars/env_variables.groovy"
                 def appUrl = "http://${env.APP_LB_URL}" // Replace with your actual app URL
