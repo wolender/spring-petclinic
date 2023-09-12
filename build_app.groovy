@@ -66,12 +66,12 @@ pipeline {
                     sh "git remote set-url origin git@github.com:wolender/spring-petclinic.git"
                     sh "ssh-keyscan github.com >> ~/.ssh/known_hosts"
                     sh "git pull git@github.com:wolender/spring-petclinic.git test"
-                    sh "git tag -a ${env.APP_NEW_VER} -m \"Version ${env.APP_NEW_VER}\""
+                    sh "git tag -a ${env.APP_NEW_VER} -m \"Version ${env.APP_NEW_VER}.test\""
                     
                     
                     sh """
                     git add . 
-                    git commit -m \"Version: ${env.APP_NEW_VER}\"
+                    git commit -m \"Version: ${env.APP_NEW_VER}.test\"
                     git push git@github.com:wolender/spring-petclinic.git test
                     """
 
@@ -95,8 +95,8 @@ pipeline {
                 load "vars/env_variables.groovy"
 
                 sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin ${env.REPO_URL}"
-                sh "docker tag wolender-ecr:${env.APP_NEW_VER} ${env.REPO_URL}:${env.APP_NEW_VER}"
-                sh "docker push ${env.REPO_URL}:${env.APP_NEW_VER}"
+                sh "docker tag wolender-ecr:${env.APP_NEW_VER} ${env.REPO_URL}:${env.APP_NEW_VER}.test"
+                sh "docker push ${env.REPO_URL}:${env.APP_NEW_VER}.test"
             }
             
         }
