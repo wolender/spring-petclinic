@@ -40,14 +40,12 @@
 
   - name: Stop all containers
     shell: docker stop $(docker ps -q)
-    when: container_running.rc == 0
     ignore_errors: yes #ignore errors in case no container are currently running
 
   - name: Delete all containers
     shell: docker rm $(docker ps -qa)
-    when: container_running.rc == 0
     ignore_errors: yes #ignore errors in case no container are currently running
 
 
   - name: run the app
-    shell: docker run -p 8080:8080 -p 3306:3306 -e MYSQL_URL=jdbc:mysql://{{ MYSQL_URL }}/petclinic -d {{ REPO_URL }}:{{ APP_NEW_VER }}
+    shell: docker run -p 8080:8080 -p 3306:3306 -e MYSQL_PASS={{ MYSQL_PASS }} -e MYSQL_USER={{ MYSQL_USER }} -e MYSQL_URL=jdbc:mysql://{{ MYSQL_URL }}/petclinic -d {{ REPO_URL }}:{{ APP_NEW_VER }}

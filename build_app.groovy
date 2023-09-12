@@ -64,9 +64,10 @@ pipeline {
                 sshagent(credentials: ['GIT_KEY']) {
                     load "vars/app_version.groovy"
                     sh "git remote set-url origin git@github.com:wolender/spring-petclinic.git"
-                    sh "git pull origin test"
-                    sh "git tag -a ${env.APP_NEW_VER}.test -m \"Version ${env.APP_NEW_VER}.test\""
                     sh "ssh-keyscan github.com >> ~/.ssh/known_hosts"
+                    sh "git pull git@github.com:wolender/spring-petclinic.git test"
+                    sh "git tag -a ${env.APP_NEW_VER} -m \"Version ${env.APP_NEW_VER}\""
+                    
                     
                     sh """
                     git add . 
