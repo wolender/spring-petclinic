@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+
+        label 'ec2-fleet'
+
+        }
 
     tools {
         maven 'mvn'
