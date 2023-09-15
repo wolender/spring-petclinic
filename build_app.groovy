@@ -7,11 +7,11 @@ pipeline {
 
 
     stages {
-        stage('Pull') {
-            steps {
-                git branch: 'main', url:'https://github.com/wolender/spring-petclinic.git'
-            }
-        }
+        // stage('Pull') {
+        //     steps {
+        //         git branch: 'main', url:'https://github.com/wolender/spring-petclinic.git'
+        //     }
+        // }
 
         stage('Static Code Analysis') {
             steps {
@@ -65,14 +65,14 @@ pipeline {
                     load "vars/app_version.groovy"
                     sh "git remote set-url origin git@github.com:wolender/spring-petclinic.git"
                     sh "ssh-keyscan github.com >> ~/.ssh/known_hosts"
-                    sh "git pull git@github.com:wolender/spring-petclinic.git main"
+                    sh "git pull git@github.com:wolender/spring-petclinic.git $BRANCH_NAME"
                     sh "git tag -a ${env.APP_NEW_VER} -m \"Version ${env.APP_NEW_VER}\""
                     
                     
                     sh """
                     git add . 
                     git commit -m \"Version: ${env.APP_NEW_VER}\"
-                    git push git@github.com:wolender/spring-petclinic.git main
+                    git push git@github.com:wolender/spring-petclinic.git $BRANCH_NAME
                     """
 
                 }
