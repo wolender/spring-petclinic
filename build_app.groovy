@@ -7,11 +7,11 @@ pipeline {
 
 
     stages {
-        stage('Pull') {
-            steps {
-                git branch: 'main', url:'https://github.com/wolender/spring-petclinic.git'
-            }
-        }
+        // stage('Pull') {
+        //     steps {
+        //         git branch: 'main', url:'https://github.com/wolender/spring-petclinic.git'
+        //     }
+        // }
 
         stage('Static Code Analysis') {
             steps {
@@ -65,14 +65,14 @@ pipeline {
                     load "vars/app_version.groovy"
                     sh "git remote set-url origin git@github.com:wolender/spring-petclinic.git"
                     sh "ssh-keyscan github.com >> ~/.ssh/known_hosts"
-                    sh "git pull git@github.com:wolender/spring-petclinic.git test"
-                    sh "git tag -a ${env.APP_NEW_VER} -m \"Version ${env.APP_NEW_VER}.test\""
+                    sh "git pull git@github.com:wolender/spring-petclinic.git $BRANCH_NAME"
+                    sh "git tag -a ${env.APP_NEW_VER} -m \"Version ${env.APP_NEW_VER}.$BRANCH_NAME\""
                     
                     
                     sh """
                     git add . 
-                    git commit -m \"Version: ${env.APP_NEW_VER}.test\"
-                    git push git@github.com:wolender/spring-petclinic.git test
+                    git commit -m \"Version: ${env.APP_NEW_VER}.$BRANCH_NAME\"
+                    git push git@github.com:wolender/spring-petclinic.git $BRANCH_NAME
                     """
 
                 }
@@ -95,8 +95,8 @@ pipeline {
                 load "vars/env_variables.groovy"
 
                 sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin ${env.REPO_URL}"
-                sh "docker tag wolender-ecr:${env.APP_NEW_VER} ${env.REPO_URL}:${env.APP_NEW_VER}.test"
-                sh "docker push ${env.REPO_URL}:${env.APP_NEW_VER}.test"
+                sh "docker tag wolender-ecr:${env.APP_NEW_VER} ${env.REPO_URL}:${env.APP_NEW_VER}.$BRANCH_NAME"
+                sh "docker push ${env.REPO_URL}:${env.APP_NEW_VER}.$BRANCH_NAME"
             }
             
         }
