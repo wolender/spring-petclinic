@@ -66,13 +66,13 @@ pipeline {
                     sh "git remote set-url origin git@github.com:wolender/spring-petclinic.git"
                     sh "ssh-keyscan github.com >> ~/.ssh/known_hosts"
                     sh "git pull git@github.com:wolender/spring-petclinic.git $BRANCH_NAME"
-                    sh "git tag -a ${env.APP_NEW_VER} -m \"Version ${env.APP_NEW_VER}\""
+                    sh "git tag -a ${env.APP_NEW_VER} -m \"Version ${env.APP_NEW_VER}.$BRANCH_NAME\""
                     
                     
                     sh """
                     git add . 
-                    git commit -m \"Version: ${env.APP_NEW_VER}\"
-                    git push git@github.com:wolender/spring-petclinic.git $BRANCH_NAME
+                    git commit -m \"Version: ${env.APP_NEW_VER}.$BRANCH_NAME\"
+                    git push git@github.com:wolender/spring-petclinic.git HEAD:$BRANCH_NAME
                     """
 
                 }
