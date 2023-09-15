@@ -72,7 +72,7 @@ pipeline {
                     sh """
                     git add . 
                     git commit -m \"Version: ${env.APP_NEW_VER}.$BRANCH_NAME\"
-                    git push git@github.com:wolender/spring-petclinic.git $BRANCH_NAME
+                    git push git@github.com:wolender/spring-petclinic.git
                     """
 
                 }
